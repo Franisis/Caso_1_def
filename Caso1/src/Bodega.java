@@ -36,17 +36,16 @@ public class Bodega {
 
         while(arregloProds.size()==0)
         {
-                
-                    System.out.println("Se pone a esperar al despachador");
-                    System.out.println("Estado de la bodega en la espera: "+ App.bodega.arregloProds.toString());
-                    System.out.println("Estado del contador en la espera: "+ App.contadorBodega); 
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                    
+            System.out.println("Se pone a esperar al despachador");
+            System.out.println("Estado de la bodega en la espera: "+ App.bodega.arregloProds.toString());
+            System.out.println("Estado del contador en la espera: "+ App.contadorBodega); 
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            
         }
         String x = arregloProds.remove(0);
         System.out.println("el despachador retira este producto retira este producto: " +x);
