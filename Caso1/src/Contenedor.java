@@ -15,7 +15,8 @@ public class Contenedor {
     public synchronized String sacarProd()
     {
         while(Contenedor.container.size()==0)
-        {   
+        { 
+             
             try {
                 System.out.println("Se pone en espera al repartidor");
                 System.out.println("Estado del contenedor: "+ container.toString());
@@ -31,7 +32,7 @@ public class Contenedor {
         if (mew){notifyAll();}
         System.out.println("¿El contenedor está lleno? " + mew);
         notifyAll();
-        return x;
+        return x+"CS";
     }
 
     public synchronized void insertInContainer(String prod)
@@ -51,7 +52,7 @@ public class Contenedor {
         }
         Boolean mew= container.size()>0;
         System.out.println("¿El contenedor está lleno y no se puede insertar nada? " + mew);
-        container.add(prod);
+        container.add(prod+"CE");
         isFull=!isFull;
         notifyAll();
 

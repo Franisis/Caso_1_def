@@ -48,6 +48,7 @@ public class App {
         for (Repartidor repartidor : repartidores) {
             repartidor.start();
         }
+        
 
     }
 

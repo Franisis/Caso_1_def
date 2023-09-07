@@ -25,7 +25,7 @@ public class Bodega {
                 e.printStackTrace();
             }
         }
-        this.arregloProds.add(prod);
+        this.arregloProds.add(prod+"BE");
         System.out.println("El estado de la bodega luego de añadir es: " + App.bodega.arregloProds.toString());
         notifyAll();
         if (this.arregloProds.size()>=1){notify();}
@@ -51,7 +51,7 @@ public class Bodega {
         String x = arregloProds.remove(0);
         System.out.println("el despachador retira este producto retira este producto: " +x);
         notifyAll();
-        return x;
+        return x+"B";
 
     }
 
