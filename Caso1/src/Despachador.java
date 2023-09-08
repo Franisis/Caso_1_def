@@ -1,6 +1,8 @@
 
 public class Despachador extends Thread{
 
+    public static Boolean marcaDespachador;
+
     public Despachador()
     {
 
@@ -34,6 +36,10 @@ public class Despachador extends Thread{
     public synchronized void insertContainer(String x)
     {
         App.contenedor.insertInContainer(x);
+    }
+
+    public synchronized static Boolean marcaDespachador() {
+        return App.contadorRepartidores>0;
     }
 
 }

@@ -60,4 +60,6 @@ public class App {
     public synchronized static void descontarRepartidor() {
         contadorRepartidores-=1;
     }
+
+    
 }

@@ -12,14 +12,17 @@ public class Repartidor extends Thread {
     public void run()
     {
         System.out.println("Hola, soy el repartidor: " + idRepartidor);
-        while(App.contadorRepartidores>0)
+         
+        while(Despachador.marcaDespachador())
         {
             
             System.out.println("Repartidor mira contador de reparticiones hechas: "+ App.contadorRepartidores);
             sacarProdContainer();
             descontarRepartidor();
+
+            
         }
-        if (App.contadorRepartidores==0)
+        if (!Despachador.marcaDespachador())
             {
                 System.out.println("Yo el repartidor: "+ idRepartidor +" .Termino el proceso. ");
                 System.exit(0);
@@ -27,6 +30,9 @@ public class Repartidor extends Thread {
         
 
     }
+
+    
+
 
     public void sacarProdContainer()
     {
