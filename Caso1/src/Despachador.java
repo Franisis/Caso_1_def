@@ -1,45 +1,48 @@
+public class Despachador extends  Thread {
 
-public class Despachador extends Thread{
+    private static boolean ejecutarRepartidores = true;
+    private final Integer numProductores;
+    private final  Integer numRepartidores;
+    private final  Integer numProductos;
+    private final Bodega bodega;
+    private final Contenedor deposito;
+    private Integer numDespachados;
 
-    public static Boolean marcaDespachador;
+    public Despachador (Integer numProductores, Integer numRepartidores, Integer numProductos,
+                        Bodega bodega, Contenedor deposito) {
 
-    public Despachador()
-    {
-
+        this.numProductores = numProductores;
+        this.numRepartidores = numRepartidores;
+        this.numProductos = numProductos;
+        this.bodega = bodega;
+        this.deposito = deposito;
+        this.numDespachados = 0;
     }
 
-    public void run ()
-    {
-        System.out.println("Hola, soy el despachador");
-        while( (App.contadorBodega>0) ){
-            System.out.println("Estado del contador antes de sacar producto: "+ App.contadorBodega);
-            String x=sacarProducto();
-            insertContainer(x+"DE");
-            descontarBodega();
-            System.out.println(App.contadorBodega+ " products remaining");   
+    @Override
+    public void run() {
+        while (numDespachados < numProductos) {
+                while (bodega.isEmpty()){
+                    condicion();
+                }
+                Producto producto = bodega.retrieve();
+                System.out.println("Estado de producto " + producto.getId() + " : en Despacho");
+                deposito.store(producto);
+                numDespachados++;
         }
-        
+        ejecutarRepartidores = false;
+        System.out.println("El despachador a terminado su ejecución");
+
     }
 
-    public synchronized String sacarProducto()
-    {
-        String x = App.bodega.sacarProd()+"S";
-        System.out.println("El despachador retira este producto: "+ x);
-        return x;
+
+    public static boolean getEjecutarRepartidores(){
+
+        return ejecutarRepartidores;
     }
 
-    public synchronized void descontarBodega()
-    {
-        App.descontarBodega();
-    }
+    public boolean condicion (){
 
-    public synchronized void insertContainer(String x)
-    {
-        App.contenedor.insertInContainer(x);
+        return Math.random() < 0.5;
     }
-
-    public synchronized static Boolean marcaDespachador() {
-        return App.contadorRepartidores>0;
-    }
-
 }

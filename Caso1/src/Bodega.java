@@ -2,56 +2,37 @@ import java.util.ArrayList;
 
 public class Bodega {
 
-    public Integer tamBodega;
+    private final ArrayList<Producto> buffer; // where the products are stored
+    private final int tamano; // buffer size
 
-    public Integer contador;
 
-    public ArrayList<String> arregloProds;
+    public Bodega (int tamano) {
 
-    public Bodega(int tamBodega)
-    {
-        this.tamBodega = tamBodega;
-        arregloProds = new ArrayList<String>();
+        this.buffer = new ArrayList<>();
+        this.tamano = tamano;
     }
 
-    public synchronized void enviarprod(String prod)
-    {
-        while(arregloProds.size()==tamBodega)
-        {
-            try {
-                System.out.println("Se pone en espera al productor: ");
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        this.arregloProds.add(prod+"BE");
-        System.out.println("El estado de la bodega luego de añadir es: " + App.bodega.arregloProds.toString());
-        notifyAll();
-        if (this.arregloProds.size()>=1){notify();}
-
-    }
-
-    public synchronized String sacarProd() {
-
-        while(arregloProds.size()==0)
-        {
-            System.out.println("Se pone a esperar al despachador");
-            System.out.println("Estado de la bodega en la espera: "+ App.bodega.arregloProds.toString());
-            System.out.println("Estado del contador en la espera: "+ App.contadorBodega); 
+    public synchronized void store(Producto producto){
+        while(buffer.size() == tamano){
             try {
                 wait();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            
         }
-        String x = arregloProds.remove(0);
-        System.out.println("el despachador retira este producto retira este producto: " +x);
-        notifyAll();
-        return x+"B";
-
+        buffer.add(producto);
+        System.out.println("Estado de producto " + producto.getId() + " : en Bodega");
     }
 
+    public synchronized Producto retrieve(){
+
+        Producto producto = buffer.remove(0);
+        notify();
+        return producto;
+    }
+
+    public boolean isEmpty() {
+
+        return buffer.isEmpty();
+    }
 }

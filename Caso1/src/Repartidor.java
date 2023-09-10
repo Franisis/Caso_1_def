@@ -1,54 +1,45 @@
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Repartidor extends Thread {
 
-    public Integer idRepartidor;
+    private final Integer id;
 
-    public Repartidor(Integer id)
-    {
-        this.idRepartidor=id;
+    private final Contenedor deposito;
+
+    public Repartidor (Integer id, Contenedor deposito){
+
+        this.id = id;
+        this.deposito = deposito;
+
     }
 
+    @Override
+    public void run(){
 
-    public void run()
-    {
-        System.out.println("Hola, soy el repartidor: " + idRepartidor);
-         
-        while(Despachador.marcaDespachador())
-        {
-            
-            System.out.println("Repartidor mira contador de reparticiones hechas: "+ App.contadorRepartidores);
-            sacarProdContainer();
-            descontarRepartidor();
+        boolean working = true;
 
-            
-        }
-        if (!Despachador.marcaDespachador())
-            {
-                System.out.println("Yo el repartidor: "+ idRepartidor +" .Termino el proceso. ");
-                System.exit(0);
+        while (working) {
+
+            Producto producto = deposito.retrieve();
+            if (producto != null) {
+            System.out.println("Estado de producto " + producto.getId() + " : en Reparto");
+
+            try {
+                Thread.sleep(ThreadLocalRandom.current().nextInt(3000, 10000));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-        
+
+            producto.realizarEntrega();
+            System.out.println("Estado de producto " + producto.getId() + " : Entregado");
+            }
+            working = Despachador.getEjecutarRepartidores();
+
+
+        }
+
+        System.out.println("El repartidor " + id + " ha terminado su ejecución");
+
 
     }
-
-    
-
-
-    public void sacarProdContainer()
-    {
-        String x = App.contenedor.sacarProd()+"R"+ this.idRepartidor;
-        System.out.println("El repartidor "+ idRepartidor+ " saca el producto: "+ x);
-        System.out.println("Estado del contenedor cuando se REPARTE el producto: "+ Contenedor.container.toString());
-        
-        
-    }
-
-    public void descontarRepartidor()
-    {
-        App.descontarRepartidor();
-        System.out.println("Se descuenta el numero de productos");
-    }   
-    
-
-
 }

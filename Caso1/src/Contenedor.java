@@ -2,61 +2,45 @@ import java.util.ArrayList;
 
 public class Contenedor {
 
-    public boolean isFull;
+    private final ArrayList<Producto> buffer; // where the products are stored
+    private final int tamano; // buffer size
 
-    public static ArrayList<String> container;
 
-    public Contenedor()
-    {
-        this.isFull = false;
-        container = new ArrayList<String>();
+    public Contenedor () {
+
+        this.buffer = new ArrayList<>();
+        this.tamano = 1;
     }
 
-    public synchronized String sacarProd()
-    {
-        while(Contenedor.container.size()==0)
-        { 
-             
+    public synchronized void store(Producto producto){
+        while(buffer.size() == tamano){
             try {
-                System.out.println("Se pone en espera al repartidor");
-                System.out.println("Estado del contenedor: "+ container.toString());
                 wait();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
-        String x = container.remove(0);
-        isFull=!isFull;
-        Boolean mew= container.size()>0;
-        if (mew){notifyAll();}
-        System.out.println("¿El contenedor está lleno? " + mew);
-        notifyAll();
-        return x+"CS";
+        buffer.add(producto);
+        System.out.println("Estado de producto " + producto.getId() + " : Despachado");
+        notify();
     }
 
-    public synchronized void insertInContainer(String prod)
-    {
-        while(container.size()>1)
-        {
-
-           //ESPERA ACTIVA!!!!!
-           /*
+    public synchronized Producto retrieve(){
+        while (buffer.isEmpty() && Despachador.getEjecutarRepartidores()){
             try {
-                System.out.println("Se pone despachador en espera de container");
                 wait();
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
-            */ 
         }
-        Boolean mew= container.size()>0;
-        System.out.println("¿El contenedor está lleno y no se puede insertar nada? " + mew);
-        container.add(prod+"CE");
-        isFull=!isFull;
-        notifyAll();
-
+        if (!buffer.isEmpty()){
+            Producto producto = buffer.remove(0);
+            notifyAll();
+            return producto;
+        } else {
+            return null;
+        }
     }
+
 
 }
