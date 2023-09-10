@@ -5,7 +5,7 @@ public class Producto {
 
     public Producto (Integer idProductor, Integer idProducto) {
 
-        this.id = Integer.toString(idProductor) + Integer.toString(idProducto);
+        this.id = idProductor + "-" + idProducto;
     }
 
     public synchronized void esperarEntrega () {

@@ -22,7 +22,7 @@ public class Repartidor extends Thread {
 
             Producto producto = deposito.retrieve();
             if (producto != null) {
-            System.out.println("Estado de producto " + producto.getId() + " : en Reparto");
+            System.out.println("Estado del producto " + producto.getId() + " : en Reparto");
 
             try {
                 Thread.sleep(ThreadLocalRandom.current().nextInt(3000, 10000));
@@ -31,7 +31,7 @@ public class Repartidor extends Thread {
             }
 
             producto.realizarEntrega();
-            System.out.println("Estado de producto " + producto.getId() + " : Entregado");
+            System.out.println("Estado del producto " + producto.getId() + " : Entregado");
             }
             working = Despachador.getEjecutarRepartidores();
 

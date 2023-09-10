@@ -26,7 +26,7 @@ public class Despachador extends  Thread {
                     condicion();
                 }
                 Producto producto = bodega.retrieve();
-                System.out.println("Estado de producto " + producto.getId() + " : en Despacho");
+                System.out.println("Estado del producto " + producto.getId() + " : en Despacho");
                 deposito.store(producto);
                 numDespachados++;
         }

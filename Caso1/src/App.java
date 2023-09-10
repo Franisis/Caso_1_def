@@ -31,8 +31,11 @@ public class App {
 
         if (numProductos <= numProductores) {
             for (int i = 0; i < numProductores; i++) {
+                if (i < numProductos){
                 productores.add(new Productor(i,numProducir,bodega));
-                numProducir++;
+                } else {
+                    productores.add(new Productor(i,0,bodega));
+                }
             }
         } else {
             numProducir = Math.round((float) numProductos / numProductores);

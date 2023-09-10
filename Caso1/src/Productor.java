@@ -21,10 +21,11 @@ public class Productor extends Thread {
 
             Producto producto = new Producto(id,numProducidos);
             System.out.println("El productor " + id + " ha producido el producto " + producto.getId());
-            System.out.println("Estado de producto " + producto.getId() + " : Producido");
+            System.out.println("Estado del producto " + producto.getId() + " : Producido");
             numProducidos ++;
             bodega.store(producto);
             if (numProducidos < numProductos){
+                System.out.println("El productor " + id + " se ha dormido sobre el producto " + producto.getId());
                 producto.esperarEntrega();
                 System.out.println("El productor " + id + " se ha despertado");
             }

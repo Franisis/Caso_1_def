@@ -21,7 +21,7 @@ public class Contenedor {
             }
         }
         buffer.add(producto);
-        System.out.println("Estado de producto " + producto.getId() + " : Despachado");
+        System.out.println("Estado del producto " + producto.getId() + " : Despachado");
         notify();
     }
 

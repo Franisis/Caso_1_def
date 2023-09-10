@@ -21,7 +21,7 @@ public class Bodega {
             }
         }
         buffer.add(producto);
-        System.out.println("Estado de producto " + producto.getId() + " : en Bodega");
+        System.out.println("Estado del producto " + producto.getId() + " : en Bodega");
     }
 
     public synchronized Producto retrieve(){
