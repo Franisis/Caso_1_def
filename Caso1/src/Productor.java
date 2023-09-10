@@ -1,27 +1,37 @@
 public class Productor extends Thread {
-    
-    public Integer idProductor;
 
-    private String producto;
+    private final Integer id;
+    private final Integer numProductos;
+    private  Integer numProducidos;
 
-    public Productor(Integer idProductor)
-    {
-        this.idProductor = idProductor;
-        this.producto = idProductor+"m";
+    private final Bodega bodega;
+
+    public Productor (Integer id, Integer numProductos, Bodega bodega){
+
+        this.id = id;
+        this.numProductos = numProductos;
+        this.bodega = bodega;
+        this.numProducidos = 0;
     }
 
-    public void run()
-    {
-        System.out.println("¡Hola soy el productor: " + idProductor);
-        enviar();
-        
-    }
+    @Override
+    public void run(){
 
-    public synchronized void enviar()
-    {
-        System.out.println("El productor: "+ idProductor+" inserta en bodega el producto: "+ producto);
-        App.bodega.enviarprod(producto);
-        
-    }
+        while (numProducidos < numProductos) {
 
+            Producto producto = new Producto(id,numProducidos);
+            System.out.println("El productor " + id + " ha producido el producto " + producto.getId());
+            System.out.println("Estado del producto " + producto.getId() + " : Producido");
+            numProducidos ++;
+            bodega.store(producto);
+            if (numProducidos < numProductos){
+                System.out.println("El productor " + id + " se ha dormido sobre el producto " + producto.getId());
+                producto.esperarEntrega();
+                System.out.println("El productor " + id + " se ha despertado");
+            }
+
+        }
+
+        System.out.println("El productor " + id + " ha terminado su ejecución");
+    }
 }
